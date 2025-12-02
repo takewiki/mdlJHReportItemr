@@ -432,7 +432,7 @@ coa_pdf <-function (erpToken = 'C0426D23-1927-4314-8736-A74B2EF7A039', FBillNo =
           sql_oss = paste0("update B set   F_RDS_QH_QualityReport =1,F_RDS_COA_XLSX ='",Url_excel,"',F_RDS_COA_PDF='",Url_pdf,"'
                             from t_sal_outStock a
 				                    INNER JOIN T_sal_outStockENTRY B ON A.FID=B.FID
-                            where CONCAT(a.F_RDS_COA_ShipOrderNo,'@',B.F_RDS_COA_ProductName,'_',F_RDS_COA_PageNumber) ='",FBillNo,"'")
+                            where CONCAT(a.FBillNo,'@',B.F_RDS_COA_ProductName,'_',F_RDS_COA_PageNumber) ='",FBillNo,"'")
           
           
           tsda::sql_update2(token = erpToken, sql_str = sql_oss)
