@@ -378,14 +378,20 @@ coa_pdf <-function (erpToken = 'C0426D23-1927-4314-8736-A74B2EF7A039', FBillNo =
           #outputFile = paste0("COA_",FBillNo, "_", FCumstoerName,".xlsx")
           # 在生成文件名时替换空格
           clean_name <- function(text) {
-            text <- gsub("\\s+", "_", text)  # 将所有空格替换为下划线
-            gsub('[\\\\/:*?"<>|]', "_", text)  # 替换其他非法字符
+            text <- as.character(text)
+            text <- gsub("\\s+", "_", text)
+            text <- gsub("[&'\"`$;!#*?<>|\\\\/:()\\[\\]{}\\\\]", "_", text, perl = TRUE)
+            text <- gsub("_+", "_", text)
+            text <- gsub("^_|_$", "", text)
+            text
           }
           
-          FCumstoerName_six <- clean_name(substr(FCumstoerName, 1, 6))
+          FCumstoerName = clean_name(FCumstoerName)
+          
+          FCumstoerName_six <- substr(FCumstoerName, 1, 6)
           FBillNo_productName <- clean_name(sub(".*@", "", FBillNo))
           FDate=coa_GetFDate(erpToken = erpToken,FBillNo = FBillNo)
-          FBillNo_no <- sub("@.*", "", FBillNo)
+          FBillNo_no <- clean_name(sub("@.*", "", FBillNo))
           
           outputFile = paste0("COA_",FCumstoerName_six,"_",FBillNo_productName,"_",FDate,"_",FBillNo_no,".xlsx")
           outputFile <- gsub("[()]", "", outputFile)
